@@ -14,26 +14,34 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }: Props) {
 
   return (
     <View style={styles.taskItem}>
-      <TouchableOpacity onPress={() => setExpanded(!expanded)} style={styles.titleRow}>
-        <Text style={[styles.taskTitle, task.completed && styles.completedTask]}>
-          {task.title}
-        </Text>
-        <Text style={styles.dropdownSymbol}>{expanded ? '▲' : '▼'}</Text>
-      </TouchableOpacity>
+        <View style={styles.titleRow}>
+            <TouchableOpacity onPress={() => setExpanded(!expanded)} style={styles.titleContainer}>
+            <Text style={[styles.taskTitle, task.completed && styles.completedTask]}>
+                {task.title}
+            </Text>
+            </TouchableOpacity>
+
+            <View style={styles.topButtonRow}>
+            <Button title={task.completed ? 'Undo' : 'Done'} onPress={() => onToggle(task.id)} />
+            <Text style={styles.dropdownSymbol}>{expanded ? '▲' : '▼'}</Text>
+            </View>
+        </View>
+
 
       {expanded && (
         <View style={styles.descriptionContainer}>
-          <Text style={[styles.taskDescription, task.completed && styles.completedTask]}>
-            {task.text?.trim() ? task.text : 'No description provided.'}
-          </Text>
+            <Text style={[styles.taskDescription, task.completed && styles.completedTask]}>
+                {task.text?.trim() ? task.text : 'No description provided.'}
+            </Text>
+            { !task.completed && (<View style={styles.buttonRow}>
+                <Button title="Edit" onPress={() => onEdit(task)} />
+                <Button title="Delete" onPress={() => onDelete(task.id)} />
+            </View>)
+            }
         </View>
       )}
 
-      <View style={styles.buttonRow}>
-        <Button title="Edit" onPress={() => onEdit(task)} />
-        <Button title="Delete" onPress={() => onDelete(task.id)} />
-        <Button title={task.completed ? 'Undo' : 'Done'} onPress={() => onToggle(task.id)} />
-      </View>
+
     </View>
   );
 }
@@ -45,15 +53,6 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 10,
     elevation: 2,
-  },
-  titleRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  taskTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
   },
   taskDescription: {
     fontSize: 16,
@@ -75,7 +74,31 @@ const styles = StyleSheet.create({
   },
   buttonRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     marginTop: 10,
+    gap: 8
+  },
+  titleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: 8,
+  },
+  
+  titleContainer: {
+    flex: 1, // allow title to take remaining space
+  },
+  taskTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    flexShrink: 1, // prevent overflow
+    flexWrap: 'wrap', // allow wrapping
+  },
+  
+  topButtonRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexShrink: 0, // prevent shrinking
+    gap: 8,
   },
 });

@@ -76,7 +76,7 @@ export default function Index() {
     <View style={styles.container}>
         <Text style={styles.title}>Task Manager</Text>
         <View style={styles.listContainer}>
-          <TaskList tasks={tasks} onToggle={toggleComplete} onDelete={confirmDeleteTask} onEdit={handleEdit}/>
+          <TaskList tasks={[...tasks].sort((a, b) => parseInt(b.id) - parseInt(a.id))} onToggle={toggleComplete} onDelete={confirmDeleteTask} onEdit={handleEdit}/>
         </View>
         <TaskForm
           visible={isFormVisible}

@@ -14,18 +14,21 @@ type Props = {
 
 
 export default function TaskList({ tasks, onToggle, onDelete, onEdit }: Props) {
+    
+
+
     return (
-      <FlatList
+        <FlatList
         data={tasks}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TaskItem task={item} onToggle={onToggle} onDelete={onDelete} onEdit={() => onEdit(item)} />
+            <TaskItem task={item} onToggle={onToggle} onDelete={onDelete} onEdit={() => onEdit(item)} />
         )}
         ListEmptyComponent={
-          <View style={{ padding: 16 }}>
+            <View style={{ padding: 16 }}>
             <Text style={{ textAlign: 'center' }}>No tasks yet.</Text>
-          </View>
+            </View>
         }
-      />
+        />
     );
   }
