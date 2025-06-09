@@ -3,20 +3,23 @@ import { Modal, View, TextInput, Button, StyleSheet, Text } from 'react-native';
 
 type Props = {
   visible: boolean;
-  initialValue?: string;
-  onSubmit: (text: string) => void;
+  initialValueText?: string;
+  initialValueTitle: string // add value here as well
+  onSubmit: (title: string, text: string) => void; //update on submit to contain new info
   onClose: () => void;
 };
 
 
 
-export default function TaskForm({ visible, initialValue = '', onSubmit, onClose }: Props) {
-    const [text, setText] = useState(initialValue);
+export default function TaskForm({ visible, initialValueText = '', initialValueTitle, onSubmit, onClose }: Props) {
+    const [text, setText] = useState(initialValueText);
+    const [title, setTitle] = useState(initialValueTitle)
 
     // Reset text when modal opens/closes or initialValue changes
     useEffect(() => {
-        setText(initialValue);
-    }, [visible, initialValue]);
+        setText(initialValueText);
+        setTitle(initialValueTitle)
+    }, [visible, initialValueText, initialValueTitle]);
 
     return (
         <Modal
@@ -30,19 +33,25 @@ export default function TaskForm({ visible, initialValue = '', onSubmit, onClose
             <Text style={styles.label}>Task:</Text>
             <TextInput
                 style={styles.input}
+                value={title}
+                onChangeText={setTitle}
+                placeholder="Enter task..."
+            />
+            <TextInput
+                style={styles.input}
                 value={text}
                 onChangeText={setText}
-                placeholder="Enter task..."
+                placeholder="Enter Description (optional)..."
             />
             <View style={styles.buttonRow}>
                 <Button title="Cancel" onPress={onClose} />
                 <Button
                 title="Save"
                 onPress={() => {
-                    onSubmit(text.trim());
+                    onSubmit(title.trim(), text.trim());
                     onClose();
                 }}
-                disabled={!text.trim()}
+                disabled={!title.trim()}
                 />
             </View>
             </View>

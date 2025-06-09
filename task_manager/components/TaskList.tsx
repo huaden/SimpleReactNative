@@ -2,12 +2,8 @@ import React from 'react';
 import { FlatList, View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native';
 
 import TaskItem from './TaskItem';
+import { Task } from '@/types/Task';
 
-type Task = {
-  id: string;
-  text: string;
-  completed: boolean;
-};
 
 type Props = {
     tasks: Task[];

@@ -6,20 +6,17 @@ import {
   Button, 
   FlatList, 
   TouchableOpacity, 
-  StyleSheet 
+  StyleSheet,
+  Alert
 } from 'react-native';
 
 import CircleButton from '@/components/CircleButton';
 import TaskItem from '@/components/TaskItem';
 import TaskList from '@/components/TaskList';
 import TaskForm from '@/components/TaskForm';
+import ConfirmDelete from '@/components/ConfimDelete';
 
-
-type Task = {
-  id: string;
-  text: string;
-  completed: boolean;
-};
+import { Task } from '@/types/Task';
 
 export default function Index() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -27,20 +24,23 @@ export default function Index() {
   const [isFormVisible, setFormVisible] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
+  const [taskToDelete, setTaskToDelete] = useState<String | null>(null);
+  const [delteConfirmVisible, setDeleteConfirmVisible] = useState(false)
 
-  const addTask = (text: string) => {
-    if (text.trim() === '') return;
+
+  const addTask = (title: string, text: string) => {
+    if (title.trim() === '') return;
     setTasks([
       ...tasks, 
-      { id: Date.now().toString(), text, completed: false }
+      { id: Date.now().toString(), title, text, completed: false }
     ]);
     setTaskText('');
   };
 
 
-  const editTask = (text: string) => {
+  const editTask = (title: string, text: string) => {
     if (!editingTask) return;
-    setTasks(tasks.map(t => t.id === editingTask.id ? { ...t, text: text } : t));
+    setTasks(tasks.map(t => t.id === editingTask.id ? { ...t, title: title, text: text} : t));
     setEditingTask(null);
     setFormVisible(false);
     console.log(tasks)
@@ -58,24 +58,41 @@ export default function Index() {
     ));
   };
 
-  const deleteTask = (id: string) => {
-    setTasks(tasks.filter(task => task.id !== id));
+  const deleteTask = () => {
+    if (taskToDelete){
+      setTasks(tasks.filter(task => task.id !== taskToDelete));
+      setTaskToDelete(null);
+      setDeleteConfirmVisible(false);
+    }
   };
+
+
+  const confirmDeleteTask = (id: string) => {
+    setTaskToDelete(id);
+    setDeleteConfirmVisible(true);
+};
 
   return (
     <View style={styles.container}>
         <Text style={styles.title}>Task Manager</Text>
         <View style={styles.listContainer}>
-          <TaskList tasks={tasks} onToggle={toggleComplete} onDelete={deleteTask} onEdit={handleEdit}/>
+          <TaskList tasks={tasks} onToggle={toggleComplete} onDelete={confirmDeleteTask} onEdit={handleEdit}/>
         </View>
         <TaskForm
           visible={isFormVisible}
-          initialValue={editingTask?.text || ''}
+          initialValueTitle={editingTask?.title || ''} //add line here for new part of form
+          initialValueText={editingTask?.text || ''}
           onSubmit={editingTask ? editTask : addTask}
           onClose={() => {
             setFormVisible(false);
             setEditingTask(null);
           }}
+        />
+        <ConfirmDelete
+        visible={delteConfirmVisible}
+        message="Are you sure you want to delete this task?"
+        onConfirm={deleteTask}
+        onCancel={() => setDeleteConfirmVisible(false)}
         />
       <View style={styles.circleButtonContainer}>
         <CircleButton onPress={() => {
@@ -83,6 +100,8 @@ export default function Index() {
           setFormVisible(!isFormVisible);
         }} />
       </View>
+
+
     </View>
   );
 }
