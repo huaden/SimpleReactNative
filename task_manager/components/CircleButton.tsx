@@ -17,11 +17,12 @@ export default function CircleButton({ onPress }: Props) {
 
 const styles = StyleSheet.create({
   circleButtonContainer: {
-    width: 84,
-    height: 84,
-    marginHorizontal: 60,
-    borderWidth: 4,
-    borderColor: '#ffd33d',
+    width: 34,
+    height: 34,
+    marginLeft: 5,
+    marginRight: 5,
+    //borderWidth: 4,
+    //borderColor: '#ffd33d',
     borderRadius: 42,
     padding: 3,
     
@@ -31,6 +32,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 42,
-    backgroundColor: '#fff',
+    backgroundColor: '#964B00',
   },
 });

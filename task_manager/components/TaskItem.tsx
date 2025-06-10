@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { Task } from '@/types/Task';
+import { useFonts } from 'expo-font';
 
 type Props = {
   task: Task;
@@ -19,11 +20,11 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }: Props) {
             <Text style={[styles.taskTitle, task.completed && styles.completedTask]}>
                 {task.title}
             </Text>
+            <Text style={styles.dropdownSymbol}>{expanded ? '▼' : '▲'}</Text>
             </TouchableOpacity>
 
             <View style={styles.topButtonRow}>
             <Button title={task.completed ? 'Undo' : 'Done'} onPress={() => onToggle(task.id)} />
-            <Text style={styles.dropdownSymbol}>{expanded ? '▲' : '▼'}</Text>
             </View>
         </View>
 
@@ -33,11 +34,16 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }: Props) {
             <Text style={[styles.taskDescription, task.completed && styles.completedTask]}>
                 {task.text?.trim() ? task.text : 'No description provided.'}
             </Text>
-            { !task.completed && (<View style={styles.buttonRow}>
-                <Button title="Edit" onPress={() => onEdit(task)} />
-                <Button title="Delete" onPress={() => onDelete(task.id)} />
-            </View>)
-            }
+            {!task.completed && (
+            <View style={styles.buttonRow}>
+                <TouchableOpacity style={styles.smallButton} onPress={() => onEdit(task)}>
+                <Text style={styles.buttonText}>Edit</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.smallButton} onPress={() => onDelete(task.id)}>
+                <Text style={styles.buttonText}>Delete</Text>
+                </TouchableOpacity>
+            </View>
+            )}
         </View>
       )}
 
@@ -55,7 +61,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   taskDescription: {
-    fontSize: 16,
+    fontSize: 12,
     color: '#555',
     marginTop: 8,
     marginBottom: 4,
@@ -65,7 +71,7 @@ const styles = StyleSheet.create({
     color: '#aaa',
   },
   dropdownSymbol: {
-    fontSize: 18,
+    fontSize: 14,
     color: '#666',
   },
   descriptionContainer: {
@@ -76,7 +82,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     marginTop: 10,
-    gap: 8
+    gap: 8,
   },
   titleRow: {
     flexDirection: 'row',
@@ -89,10 +95,11 @@ const styles = StyleSheet.create({
     flex: 1, // allow title to take remaining space
   },
   taskTitle: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: 'bold',
     flexShrink: 1, // prevent overflow
     flexWrap: 'wrap', // allow wrapping
+    fontFamily: 'Inter'
   },
   
   topButtonRow: {
@@ -100,5 +107,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexShrink: 0, // prevent shrinking
     gap: 8,
+  },
+  smallButton: {
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    backgroundColor: '#007AFF',
+    borderRadius: 6,
+    marginRight: 8,
+  },
+  
+  buttonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '500',
   },
 });

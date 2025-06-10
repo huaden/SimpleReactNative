@@ -20,6 +20,7 @@ import { Task } from '@/types/Task';
 
 export default function Index() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [taskText, setTaskText] = useState<string>('');
   const [isFormVisible, setFormVisible] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
@@ -27,6 +28,14 @@ export default function Index() {
   const [taskToDelete, setTaskToDelete] = useState<String | null>(null);
   const [delteConfirmVisible, setDeleteConfirmVisible] = useState(false)
 
+
+  const getFilterTasks = () => {
+    const filteredTasks = tasks.filter(task =>
+      task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      task.text.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    return filteredTasks
+  }
 
   const addTask = (title: string, text: string) => {
     if (title.trim() === '') return;
@@ -74,9 +83,17 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-        <Text style={styles.title}>Task Manager</Text>
+        <Text style={styles.title}> Current Tasks</Text>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search tasks..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          autoCorrect={false}
+          clearButtonMode="while-editing"
+        />
         <View style={styles.listContainer}>
-          <TaskList tasks={[...tasks].sort((a, b) => parseInt(b.id) - parseInt(a.id))} onToggle={toggleComplete} onDelete={confirmDeleteTask} onEdit={handleEdit}/>
+          <TaskList tasks={[...getFilterTasks()].sort((a, b) => parseInt(b.id) - parseInt(a.id))} onToggle={toggleComplete} onDelete={confirmDeleteTask} onEdit={handleEdit}/>
         </View>
         <TaskForm
           visible={isFormVisible}
@@ -94,12 +111,17 @@ export default function Index() {
         onConfirm={deleteTask}
         onCancel={() => setDeleteConfirmVisible(false)}
         />
-      <View style={styles.circleButtonContainer}>
-        <CircleButton onPress={() => {
-          setEditingTask(null);
-          setFormVisible(!isFormVisible);
-        }} />
-      </View>
+        <TouchableOpacity style={styles.footerRow} onPress={() => {
+              setEditingTask(null);
+              setSearchQuery("");
+              setFormVisible(!isFormVisible);
+            }}>
+            <CircleButton onPress={() => {
+              setEditingTask(null);
+              setFormVisible(!isFormVisible);
+            }} />
+            <Text>New Task</Text>
+        </TouchableOpacity>
 
 
     </View>
@@ -109,14 +131,22 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
+    padding: 12,
     backgroundColor: '#fff',
   },
+  searchInput: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginVertical: 12,
+  },
   title: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: 'bold',
     marginVertical: 16,
-    textAlign: 'center',
+    textAlign: 'left',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -145,8 +175,13 @@ const styles = StyleSheet.create({
     color: '#aaa',
   },
   circleButtonContainer: {
+    justifyContent: 'flex-start'
+  },
+  footerRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    // No need for justifyContent, default is 'flex-start'
+    // Add marginTop if you want space above the footer
   },
   listContainer: {
     flex: 1, // or a fixed height, e.g., height: 300
