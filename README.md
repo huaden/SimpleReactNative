@@ -26,4 +26,4 @@ A basic task manager app using react-native
 2) Open a terminal and go into the task_manager directory, "cd SimpleReactNative/task_manager"
 3) Now run the command: "npm install", this will install the needed packages to run the app
 4) To run the app use the command: "npx expo start", this will start the app on localhost port
-5) Go to the link that pops up in the terminal, default link should be http://localhost:8081 but may be different if the port is being used
+5) Go to the link that pops up in the terminal, default link should be `http://<host_ip>:8081` but may be different if the port is being used
