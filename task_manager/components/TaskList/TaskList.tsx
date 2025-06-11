@@ -1,9 +1,10 @@
 import React from 'react';
 import { FlatList, View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native';
 
-import TaskItem from './TaskItem';
+import TaskItem from '../TaskItem/TaskItem';
 import { Task } from '@/types/Task';
 import { useState } from 'react';
+import { styles } from "@/components/TaskList/TaskListStyles"
 
 
 type Props = {
@@ -19,6 +20,7 @@ type Filter = 'all' | 'completed' | 'uncompleted';
 export default function TaskList({ tasks, onToggle, onDelete, onEdit }: Props) {
     const [filter, setFilter] = useState<Filter>('all');
 
+    //returns the list with the filtered tasks depending on what the user clicks/wants
     const getFilteredTasks = () => {
       if (filter === 'completed') return tasks.filter(t => t.completed);
       if (filter === 'uncompleted') return tasks.filter(t => !t.completed);
@@ -28,6 +30,7 @@ export default function TaskList({ tasks, onToggle, onDelete, onEdit }: Props) {
 
     return (
         <View>
+
             <View style={styles.filterRow}>
                 <TouchableOpacity
                 style={[styles.filterButton, filter === 'all' && styles.activeFilter]}
@@ -35,12 +38,14 @@ export default function TaskList({ tasks, onToggle, onDelete, onEdit }: Props) {
                 >
                 <Text style={styles.filterText}>All</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity
                 style={[styles.filterButton, filter === 'completed' && styles.activeFilter]}
                 onPress={() => setFilter('completed')}
                 >
                 <Text style={styles.filterText}>Completed</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity
                 style={[styles.filterButton, filter === 'uncompleted' && styles.activeFilter]}
                 onPress={() => setFilter('uncompleted')}
@@ -48,6 +53,7 @@ export default function TaskList({ tasks, onToggle, onDelete, onEdit }: Props) {
                 <Text style={styles.filterText}>Uncompleted</Text>
                 </TouchableOpacity>
             </View>
+
 
             <FlatList
             data={getFilteredTasks()}
@@ -63,29 +69,4 @@ export default function TaskList({ tasks, onToggle, onDelete, onEdit }: Props) {
             />
         </View>
     );
-  }
-
-
-
-const styles = StyleSheet.create({
-filterRow: {
-    flexDirection: 'row',
-    marginBottom: 8,
-    alignItems: 'center',
-    // Top left by default in flexbox
-},
-filterButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 16,
-    backgroundColor: '#eee',
-    marginRight: 8,
-},
-activeFilter: {
-    backgroundColor: '#007AFF',
-},
-filterText: {
-    color: '#222',
-    fontWeight: 'bold',
-},
-});
+}

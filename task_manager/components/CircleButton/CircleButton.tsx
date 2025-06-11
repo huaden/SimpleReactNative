@@ -1,10 +1,13 @@
 import { View, Pressable, StyleSheet } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { styles } from "@/components/CircleButton/CircleButtonStyles";  
 
 type Props = {
   onPress: () => void;
 };
 
+
+//onPress changes the TaskForm to visible currently
 export default function CircleButton({ onPress }: Props) {
   return (
     <View style={styles.circleButtonContainer}>
@@ -15,23 +18,3 @@ export default function CircleButton({ onPress }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  circleButtonContainer: {
-    width: 34,
-    height: 34,
-    marginLeft: 5,
-    marginRight: 5,
-    //borderWidth: 4,
-    //borderColor: '#ffd33d',
-    borderRadius: 42,
-    padding: 3,
-    
-  },
-  circleButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 42,
-    backgroundColor: '#964B00',
-  },
-});

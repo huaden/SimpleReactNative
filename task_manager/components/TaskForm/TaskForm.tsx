@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, View, TextInput, Button, StyleSheet, Text } from 'react-native';
+import { styles } from "@/components/TaskForm/TaskFormStyles"
 
 type Props = {
   visible: boolean;
@@ -11,6 +12,7 @@ type Props = {
 
 
 
+//onSubmit call addTask or editTask depending on the which button was pressed, see @hooks/useTask for implementation
 export default function TaskForm({ visible, initialValueText = '', initialValueTitle, onSubmit, onClose }: Props) {
     const [text, setText] = useState(initialValueText);
     const [title, setTitle] = useState(initialValueTitle)
@@ -59,32 +61,3 @@ export default function TaskForm({ visible, initialValueText = '', initialValueT
         </Modal>
     );
 }
-
-const styles = StyleSheet.create({
-modalOverlay: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    padding: 20,
-},
-modalContent: {
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 20,
-},
-label: {
-    fontSize: 16,
-    marginBottom: 8,
-},
-input: {
-    borderColor: '#aaa',
-    borderWidth: 1,
-    borderRadius: 4,
-    padding: 10,
-    marginBottom: 16,
-},
-buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-},
-});

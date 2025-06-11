@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { Task } from '@/types/Task';
 import { useFonts } from 'expo-font';
+import { styles } from "@/components/TaskItem/TaskItemStyles"
 
 type Props = {
   task: Task;
@@ -10,6 +11,9 @@ type Props = {
   onEdit: (task: Task) => void;
 };
 
+
+//onToggle sets the task to be done or not, then changes style to be crossed out
+//onDelete call confirmDelete  from /hooks/useTasks currently
 export default function TaskItem({ task, onToggle, onDelete, onEdit }: Props) {
   const [expanded, setExpanded] = useState(false);
 
@@ -29,6 +33,7 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }: Props) {
         </View>
 
 
+      {/*If the user wants to see more details then display the extra info with edit and delete buttons now available */}
       {expanded && (
         <View style={styles.descriptionContainer}>
             <Text style={[styles.taskDescription, task.completed && styles.completedTask]}>
@@ -51,74 +56,3 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }: Props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  taskItem: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 10,
-    elevation: 2,
-  },
-  taskDescription: {
-    fontSize: 12,
-    color: '#555',
-    marginTop: 8,
-    marginBottom: 4,
-  },
-  completedTask: {
-    textDecorationLine: 'line-through',
-    color: '#aaa',
-  },
-  dropdownSymbol: {
-    fontSize: 14,
-    color: '#666',
-  },
-  descriptionContainer: {
-    paddingTop: 6,
-    paddingLeft: 4,
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    marginTop: 10,
-    gap: 8,
-  },
-  titleRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    gap: 8,
-  },
-  
-  titleContainer: {
-    flex: 1, // allow title to take remaining space
-  },
-  taskTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    flexShrink: 1, // prevent overflow
-    flexWrap: 'wrap', // allow wrapping
-    fontFamily: 'Inter'
-  },
-  
-  topButtonRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexShrink: 0, // prevent shrinking
-    gap: 8,
-  },
-  smallButton: {
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    backgroundColor: '#007AFF',
-    borderRadius: 6,
-    marginRight: 8,
-  },
-  
-  buttonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-});

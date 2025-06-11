@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, View, Text, Button, StyleSheet } from 'react-native';
+import {styles} from "@/components/ConfirmDelete/ConfirmDeleteStyles"
 
 type Props = {
   visible: boolean;
@@ -8,6 +9,8 @@ type Props = {
   onCancel: () => void;
 };
 
+//onConfirm currently calls deleteTask in @/hooks/useTasks
+//onCancel sets the taskForm to no longer be visible and doesn't delete the item
 export default function ConfirmDelete({ visible, message, onConfirm, onCancel }: Props) {
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
@@ -23,28 +26,3 @@ export default function ConfirmDelete({ visible, message, onConfirm, onCancel }:
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  container: {
-    backgroundColor: '#fff',
-    padding: 24,
-    borderRadius: 8,
-    width: '80%',
-    maxWidth: 320,
-  },
-  message: {
-    fontSize: 18,
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-});
